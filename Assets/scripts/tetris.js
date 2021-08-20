@@ -76,29 +76,26 @@ class Game {
     }
 
     showWelcome() {
-        Swal.fire("Bienvenido", `Port casi perfecto del juego de Tetris en JavaScript.
+        Swal.fire("Bienvenido", `
 <br>
 <strong>Controles:</strong>
 <ul class="list-group">
 <li class="list-group-item"> <kbd>P</kbd><br>Pausar o reanudar </li>
 <li class="list-group-item"> <kbd>R</kbd><br>Rotar</li>
 <li class="list-group-item"> <kbd>Flechas de dirección</kbd><br>Mover figura hacia esa dirección</li>
-<li class="list-group-item"><strong>También puedes usar los botones si estás en móvil</strong></li>
 </ul>
-<strong>Creado por <a href="https://parzibyte.me/blog">Parzibyte</a></strong>
 <br>
-Gracias a <a target="_blank" href="https://www.youtube.com/channel/UCz6zvgkf6eKpgqlUZQstOtQ">Bulby</a> por la música de fondo
-y a <a href="https://freesound.org/people/grunz/sounds/109662/">Freesound.org</a> por el sonido al completar una línea
 `);
     }
 
-
+// configuration of controls of the game//
     initControls() {
         document.addEventListener("keydown", (e) => {
             const { code } = e;
             if (!this.canPlay && code !== "KeyP") {
                 return;
             }
+            // functions to verify the attemp of movement of the piece//
             switch (code) {
                 case "ArrowRight":
                     this.attemptMoveRight();
@@ -118,46 +115,26 @@ y a <a href="https://freesound.org/people/grunz/sounds/109662/">Freesound.org</a
             }
             this.syncExistingPiecesWithBoard();
         });
-
-        this.$btnDown.addEventListener("click", () => {
-            if (!this.canPlay) return;
-            this.attemptMoveDown();
-        });
-        this.$btnRight.addEventListener("click", () => {
-            if (!this.canPlay) return;
-            this.attemptMoveRight();
-        });
-        this.$btnLeft.addEventListener("click", () => {
-            if (!this.canPlay) return;
-            this.attemptMoveLeft();
-        });
-        this.$btnRotate.addEventListener("click", () => {
-            if (!this.canPlay) return;
-            this.attemptRotate();
-        });
-        [this.$btnPause, this.$btnResume].forEach($btn => $btn.addEventListener("click", () => {
-            this.pauseOrResumeGame();
-        }));
     }
-
+// attempt to try to move the piece to the rigth //
     attemptMoveRight() {
         if (this.figureCanMoveRight()) {
             this.globalX++;
         }
     }
-
+// attempt to try to move the piece to the left//
     attemptMoveLeft() {
         if (this.figureCanMoveLeft()) {
             this.globalX--;
         }
     }
-
+// attempt to try to move the piece to the down//
     attemptMoveDown() {
         if (this.figureCanMoveDown()) {
             this.globalY++;
         }
     }
-
+// attempt to try to rotate the piece //
     attemptRotate() {
         this.rotateFigure();
     }
@@ -173,23 +150,22 @@ y a <a href="https://freesound.org/people/grunz/sounds/109662/">Freesound.org</a
             this.$btnPause.hidden = true;
         }
     }
-
+// to pause the game//
     pauseGame() {
         this.sounds.background.pause();
         this.paused = true;
         this.canPlay = false;
         clearInterval(this.intervalId);
     }
-
+// to return to the current game after pause//
     resumeGame() {
-        this.sounds.background.play();
         this.refreshScore();
         this.paused = false;
         this.canPlay = true;
         this.intervalId = setInterval(this.mainLoop.bind(this), Game.PIECE_SPEED);
     }
 
-
+// to return to the current game after pause//
     moveFigurePointsToExistingPieces() {
         this.canPlay = false;
         for (const point of this.currentFigure.getPoints()) {
