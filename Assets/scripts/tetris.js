@@ -203,7 +203,7 @@ class Game {
         }
         return points;
     }
-
+//// the function cghange the color of a completed line//
     changeDeletedRowColor(yCoordinates) {
         for (let y of yCoordinates) {
             for (const point of this.existingPieces[y]) {
@@ -212,13 +212,13 @@ class Game {
         }
     };
 
-
+    //// the function add the score of the erased row//
     addScore(rows) {
         this.score += Game.PER_SQUARE_SCORE * Game.COLUMNS * rows.length;
         this.refreshScore();
     }
 
-
+//// erase the square of the piece of a row completed //
     removeRowsFromExistingPieces(yCoordinates) {
         for (let y of yCoordinates) {
             for (const point of this.existingPieces[y]) {
@@ -230,16 +230,13 @@ class Game {
 
 
     verifyAndDeleteFullRows() {
-        // Here be dragons
+        
         const yCoordinates = this.getPointsToDelete();
         if (yCoordinates.length <= 0) return;
         this.addScore(yCoordinates);
-        this.sounds.success.currentTime = 0;
-        this.sounds.success.play();
         this.changeDeletedRowColor(yCoordinates);
         this.canPlay = false;
         setTimeout(() => {
-            this.sounds.success.pause();
             this.removeRowsFromExistingPieces(yCoordinates);
             this.syncExistingPiecesWithBoard();
             const invertedCoordinates = Array.from(yCoordinates);
@@ -296,8 +293,7 @@ class Game {
                 }
                 // At this point, we know that the figure collapsed either with the floor
                 // or with another point. So we move all the figure to the existing pieces array
-                this.sounds.tap.currentTime = 0;
-                this.sounds.tap.play();
+                
                 this.moveFigurePointsToExistingPieces();
                 if (this.playerLoses()) {
                     Swal.fire("Juego terminado", "Inténtalo de nuevo");
@@ -359,7 +355,8 @@ class Game {
         }
         setTimeout(() => {
             requestAnimationFrame(this.draw.bind(this));
-        }, 17);
+        }, 20
+        );
     }
 
     refreshScore() {
@@ -368,25 +365,17 @@ class Game {
 
     initSounds() {
         this.sounds.background = Utils.loadSound("assets/New Donk City_ Daytime 8 Bit.mp3", true);
-        this.sounds.success = Utils.loadSound("assets/success.wav");
-        this.sounds.denied = Utils.loadSound("assets/denied.wav");
-        this.sounds.tap = Utils.loadSound("assets/tap.wav");
+        this.sounds.success = Utils.loadSound("assets/success.wav");  
     }
 
     initDomElements() {
         this.$canvas = document.querySelector("#" + this.canvasId);
-        this.$score = document.querySelector("#puntaje");
-        this.$btnPause = document.querySelector("#btnPausar");
-        this.$btnResume = document.querySelector("#btnIniciar");
-        this.$btnRotate = document.querySelector("#btnRotar");
-        this.$btnDown = document.querySelector("#btnAbajo");
-        this.$btnRight = document.querySelector("#btnDerecha");
-        this.$btnLeft = document.querySelector("#btnIzquierda");
+        this.$score = document.querySelector("#puntaje");     
         this.$canvas.setAttribute("width", Game.CANVAS_WIDTH + "px");
         this.$canvas.setAttribute("height", Game.CANVAS_HEIGHT + "px");
         this.canvasContext = this.$canvas.getContext("2d");
     }
-
+    // a figure is choosed randomly// 
     chooseRandomFigure() {
         this.currentFigure = this.getRandomFigure();
     }
@@ -396,7 +385,7 @@ class Game {
         this.globalY = 0;
     }
 
-
+    // The function to select one of the tetrominoes randomly//
     getRandomFigure() {
         /*
         * Nombres de los tetrominós tomados de: https://www.joe.co.uk/gaming/tetris-block-names-221127
@@ -406,7 +395,7 @@ class Game {
         switch (Utils.getRandomNumberInRange(1, 7)) {
             case 1:
                 /*
-                El cuadrado (smashboy)
+                The square
                 **
                 **
                 */
@@ -416,7 +405,7 @@ class Game {
             case 2:
 
                 /*
-                La línea (hero)
+                The Line
                 ****
                 */
                 return new Tetromino([
@@ -426,7 +415,7 @@ class Game {
             case 3:
 
                 /*
-                La L (orange ricky)
+                The "L"
                   *
                 ***
                 */
@@ -440,7 +429,7 @@ class Game {
             case 4:
 
                 /*
-                La J (blue ricky)
+                The "J"
                 *
                 ***
                 */
@@ -453,7 +442,7 @@ class Game {
                 ]);
             case 5:
                 /*
-               La Z (Cleveland Z)
+               The "Z"
                **
                 **
                */
@@ -465,7 +454,7 @@ class Game {
             case 6:
 
                 /*
-               La otra Z (Rhode island Z)
+                The "S"
                 **
                **
                */
@@ -477,7 +466,7 @@ class Game {
             default:
 
                 /*
-               La T (Teewee)
+               The "T"
                 *
                ***
                */
@@ -509,10 +498,9 @@ class Game {
         }
     }
 
-    /**
-     *
-     * @param point An object that has x and y properties; the coordinates shouldn't be global, but relative to the point
-     * @returns {boolean}
+    /*
+    @param point An object that has x and y properties; the coordinates shouldn't be global, but relative to the point
+    @returns {boolean}
      */
     relativePointOutOfLimits(point) {
         const absoluteX = point.x + this.globalX;
@@ -520,10 +508,10 @@ class Game {
         return this.absolutePointOutOfLimits(absoluteX, absoluteY);
     }
 
-    /**
-     * @param absoluteX
-     * @param absoluteY
-     * @returns {boolean}
+    /*
+    @param absoluteX
+    @param absoluteY
+    @returns {boolean}
      */
     absolutePointOutOfLimits(absoluteX, absoluteY) {
         return absoluteX < 0 || absoluteX > Game.COLUMNS - 1 || absoluteY < 0 || absoluteY > Game.ROWS - 1;
@@ -540,11 +528,12 @@ class Game {
         }
     }
 
-    /**
-     * Check if a point (in the game board) is valid to put another point there.
-     * @param point the point to check, with relative coordinates
-     * @param points an array of points that conforms a figure
+    /*
+    Check if a point (in the game board) is valid to put another point there.
+    @param point the point to check, with relative coordinates
+    @param points an array of points that conforms a figure
      */
+
     isValidPoint(point, points) {
         const emptyPoint = this.isEmptyPoint(this.globalX + point.x, this.globalY + point.y);
         const hasSameCoordinateOfFigurePoint = points.findIndex(p => {
@@ -557,7 +546,7 @@ class Game {
             return false;
         }
     }
-
+    /// after confirm with the figure movement attemp is possible to the right the function moves the figure 1 square//
     figureCanMoveRight() {
         if (!this.currentFigure) return false;
         for (const point of this.currentFigure.getPoints()) {
@@ -568,7 +557,7 @@ class Game {
         }
         return true;
     }
-
+    /// after confirm with the figure movement attemp is possible to left the function moves the figure 1 square//
     figureCanMoveLeft() {
         if (!this.currentFigure) return false;
         for (const point of this.currentFigure.getPoints()) {
@@ -579,7 +568,7 @@ class Game {
         }
         return true;
     }
-
+    /// after confirm with the figure movement attemp is possible to down the function moves the figure 1 square//
     figureCanMoveDown() {
         if (!this.currentFigure) return false;
         for (const point of this.currentFigure.getPoints()) {
@@ -590,7 +579,7 @@ class Game {
         }
         return true;
     }
-
+     /// after confirm the attempt of rotation rotate the piece//
     figureCanRotate() {
         const newPointsAfterRotate = this.currentFigure.getNextRotation();
         for (const rotatedPoint of newPointsAfterRotate) {
@@ -604,8 +593,6 @@ class Game {
 
     rotateFigure() {
         if (!this.figureCanRotate()) {
-            this.sounds.denied.currentTime = 0;
-            this.sounds.denied.play();
             return;
         }
         this.currentFigure.points = this.currentFigure.getNextRotation();
