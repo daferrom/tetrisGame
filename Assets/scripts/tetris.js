@@ -46,7 +46,6 @@ class Game {
         this.globalY = 0;
         this.paused = true;
         this.currentFigure = null;
-        this.sounds = {};
         this.canPlay = false;
         this.intervalId = null;
         this.init();
@@ -55,7 +54,6 @@ class Game {
     init() {
         this.showWelcome();
         this.initDomElements();
-        this.initSounds();
         this.resetGame();
         this.draw();
         this.initControls();
@@ -63,10 +61,6 @@ class Game {
 
     resetGame() {
         this.score = 0;
-        this.sounds.success.currentTime = 0;
-        this.sounds.success.pause();
-        this.sounds.background.currentTime = 0;
-        this.sounds.background.pause();
         this.initBoardAndExistingPieces();
         this.chooseRandomFigure();
         this.restartGlobalXAndY();
@@ -114,7 +108,14 @@ class Game {
             }
             this.syncExistingPiecesWithBoard();
         });
+
+        [this.$btnPause, this.$btnResume].forEach($btn => $btn.addEventListener("click", () => {
+            this.pauseOrResumeGame();
+        }));
+
     }
+
+
     // attempt to try to move the piece to the rigth //
     attemptMoveRight() {
         if (this.figureCanMoveRight()) {
@@ -151,7 +152,7 @@ class Game {
     }
     // to pause the game//
     pauseGame() {
-        this.sounds.background.pause();
+        /* this.sounds.background.pause(); */
         this.paused = true;
         this.canPlay = false;
         clearInterval(this.intervalId);
@@ -180,7 +181,7 @@ class Game {
     }
 
     playerLoses() {
-        // Check if there's something at Y 1. Maybe it is not fair for the player, but it works
+        // Check if there's something at Y 1
         for (const point of this.existingPieces[1]) {
             if (point.taken) {
                 return true;
@@ -188,7 +189,6 @@ class Game {
         }
         return false;
     }
-
 
     getPointsToDelete = () => {
         const points = [];
@@ -203,7 +203,7 @@ class Game {
         }
         return points;
     }
-//// the function cghange the color of a completed line//
+    //// the function cghange the color of a completed line//
     changeDeletedRowColor(yCoordinates) {
         for (let y of yCoordinates) {
             for (const point of this.existingPieces[y]) {
@@ -218,7 +218,7 @@ class Game {
         this.refreshScore();
     }
 
-//// erase the square of the piece of a row completed //
+    //// erase the square of the piece of a row completed //
     removeRowsFromExistingPieces(yCoordinates) {
         for (let y of yCoordinates) {
             for (const point of this.existingPieces[y]) {
@@ -230,7 +230,7 @@ class Game {
 
 
     verifyAndDeleteFullRows() {
-        
+
         const yCoordinates = this.getPointsToDelete();
         if (yCoordinates.length <= 0) return;
         this.addScore(yCoordinates);
@@ -270,6 +270,7 @@ class Game {
         }, Game.DELETE_ROW_ANIMATION);
     }
 
+    //Main Game Cycle
     mainLoop() {
         if (!this.canPlay) {
             return;
@@ -293,11 +294,10 @@ class Game {
                 }
                 // At this point, we know that the figure collapsed either with the floor
                 // or with another point. So we move all the figure to the existing pieces array
-                
+
                 this.moveFigurePointsToExistingPieces();
                 if (this.playerLoses()) {
                     Swal.fire("Juego terminado", "Inténtalo de nuevo");
-                    this.sounds.background.pause();
                     this.canPlay = false;
                     this.resetGame();
                     return;
@@ -310,7 +310,7 @@ class Game {
         this.syncExistingPiecesWithBoard();
     }
 
-
+    //Clean the board
     cleanGameBoardAndOverlapExistingPieces() {
         for (let y = 0; y < Game.ROWS; y++) {
             for (let x = 0; x < Game.COLUMNS; x++) {
@@ -339,6 +339,7 @@ class Game {
         this.overlapCurrentFigureOnGameBoard();
     }
 
+    //Draw the board on the canvas
     draw() {
         let x = 0, y = 0;
         for (const row of this.board) {
@@ -363,23 +364,23 @@ class Game {
         this.$score.textContent = `Score: ${this.score}`;
     }
 
-    initSounds() {
-        this.sounds.background = Utils.loadSound("assets/New Donk City_ Daytime 8 Bit.mp3", true);
-        this.sounds.success = Utils.loadSound("assets/success.wav");  
-    }
-
+    //Start the elements of the Dom
     initDomElements() {
         this.$canvas = document.querySelector("#" + this.canvasId);
-        this.$score = document.querySelector("#puntaje");     
+        this.$score = document.querySelector("#puntaje");
+        this.$btnPause = document.querySelector("#btnPausar");
+        this.$btnResume = document.querySelector("#btnIniciar");
         this.$canvas.setAttribute("width", Game.CANVAS_WIDTH + "px");
         this.$canvas.setAttribute("height", Game.CANVAS_HEIGHT + "px");
         this.canvasContext = this.$canvas.getContext("2d");
     }
+
     // a figure is choosed randomly// 
     chooseRandomFigure() {
         this.currentFigure = this.getRandomFigure();
     }
 
+    //Restart X and Y to place a new piece, X puts it in the middle of the board and Y zeroes
     restartGlobalXAndY() {
         this.globalX = Math.floor(Game.COLUMNS / 2) - 1;
         this.globalY = 0;
@@ -387,89 +388,59 @@ class Game {
 
     // The function to select one of the tetrominoes randomly//
     getRandomFigure() {
-        /*
-        * Nombres de los tetrominós tomados de: https://www.joe.co.uk/gaming/tetris-block-names-221127
-        * Regresamos una nueva instancia en cada ocasión, pues si definiéramos las figuras en constantes o variables, se tomaría la misma
-        * referencia en algunas ocasiones
-        * */
+        /* Regresamos una nueva instancia en cada ocasión, pues si definiéramos las figuras en constantes o variables, se tomaría la misma
+        referencia en algunas ocasiones */
+
         switch (Utils.getRandomNumberInRange(1, 7)) {
+
             case 1:
-                /*
-                The square
-                **
-                **
-                */
+                /* The square "o"*/
                 return new Tetromino([
                     [new Point(0, 0), new Point(1, 0), new Point(0, 1), new Point(1, 1)]
                 ]);
-            case 2:
 
-                /*
-                The Line
-                ****
-                */
+            case 2:
+                /* The Line "|"*/
                 return new Tetromino([
                     [new Point(0, 0), new Point(1, 0), new Point(2, 0), new Point(3, 0)],
                     [new Point(0, 0), new Point(0, 1), new Point(0, 2), new Point(0, 3)],
                 ]);
+
             case 3:
-
-                /*
-                The "L"
-                  *
-                ***
-                */
-
+                /* The "L" */
                 return new Tetromino([
                     [new Point(0, 1), new Point(1, 1), new Point(2, 1), new Point(2, 0)],
                     [new Point(0, 0), new Point(0, 1), new Point(0, 2), new Point(1, 2)],
                     [new Point(0, 0), new Point(0, 1), new Point(1, 0), new Point(2, 0)],
                     [new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(1, 2)],
                 ]);
+
             case 4:
-
-                /*
-                The "J"
-                *
-                ***
-                */
-
+                /*  The "J" */
                 return new Tetromino([
                     [new Point(0, 0), new Point(0, 1), new Point(1, 1), new Point(2, 1)],
                     [new Point(0, 0), new Point(1, 0), new Point(0, 1), new Point(0, 2)],
                     [new Point(0, 0), new Point(1, 0), new Point(2, 0), new Point(2, 1)],
                     [new Point(0, 2), new Point(1, 2), new Point(1, 1), new Point(1, 0)],
                 ]);
-            case 5:
-                /*
-               The "Z"
-               **
-                **
-               */
 
+            case 5:
+                /* The "Z" */
                 return new Tetromino([
                     [new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(2, 1)],
                     [new Point(0, 1), new Point(1, 1), new Point(1, 0), new Point(0, 2)],
                 ]);
-            case 6:
 
-                /*
-                The "S"
-                **
-               **
-               */
+            case 6:
+                /* The "S" */
                 return new Tetromino([
                     [new Point(0, 1), new Point(1, 1), new Point(1, 0), new Point(2, 0)],
                     [new Point(0, 0), new Point(0, 1), new Point(1, 1), new Point(1, 2)],
                 ]);
+
             case 7:
             default:
-
-                /*
-               The "T"
-                *
-               ***
-               */
+                /*  The "T" */
                 return new Tetromino([
                     [new Point(0, 1), new Point(1, 1), new Point(1, 0), new Point(2, 1)],
                     [new Point(0, 0), new Point(0, 1), new Point(0, 2), new Point(1, 1)],
@@ -546,6 +517,7 @@ class Game {
             return false;
         }
     }
+
     /// after confirm with the figure movement attemp is possible to the right the function moves the figure 1 square//
     figureCanMoveRight() {
         if (!this.currentFigure) return false;
@@ -579,7 +551,7 @@ class Game {
         }
         return true;
     }
-     /// after confirm the attempt of rotation rotate the piece//
+    /// after confirm the attempt of rotation rotate the piece//
     figureCanRotate() {
         const newPointsAfterRotate = this.currentFigure.getNextRotation();
         for (const rotatedPoint of newPointsAfterRotate) {
@@ -589,7 +561,6 @@ class Game {
         }
         return true;
     }
-
 
     rotateFigure() {
         if (!this.figureCanRotate()) {
@@ -620,7 +591,6 @@ class Game {
 
 }
 
-
 class Utils {
     static getRandomNumberInRange = (min, max) => {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -630,16 +600,6 @@ class Utils {
         return Game.COLORS[Utils.getRandomNumberInRange(0, Game.COLORS.length - 1)];
     }
 
-    static loadSound(src, loop) {
-        const sound = document.createElement("audio");
-        sound.src = src;
-        sound.setAttribute("preload", "auto");
-        sound.setAttribute("controls", "none");
-        sound.loop = loop || false;
-        sound.style.display = "none";
-        document.body.appendChild(sound);
-        return sound;
-    }
 }
 
 class Point {
