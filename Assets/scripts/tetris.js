@@ -36,7 +36,7 @@ class Game {
         "#fd971f",
     ];
 
-    
+
     constructor(canvasId) {
         this.canvasId = canvasId;
         this.timeoutFlag = false;
@@ -77,18 +77,17 @@ class Game {
 
     showWelcome() {
         Swal.fire("Bienvenido", `
-<br>
-<strong>Controles:</strong>
-<ul class="list-group">
-<li class="list-group-item"> <kbd>P</kbd><br>Pausar o reanudar </li>
-<li class="list-group-item"> <kbd>R</kbd><br>Rotar</li>
-<li class="list-group-item"> <kbd>Flechas de dirección</kbd><br>Mover figura hacia esa dirección</li>
-</ul>
-<br>
-`);
+            <br>
+            <strong>Controles:</strong>
+            <ul class="list-group">
+            <li class="list-group-item"> <kbd>P</kbd><br>Pausar o reanudar </li>
+            <li class="list-group-item"> <kbd>R</kbd><br>Rotar</li>
+            <li class="list-group-item"> <kbd>Flechas de dirección</kbd><br>Mover figura hacia esa dirección</li>
+            </ul>
+            <br>`);
     }
 
-// configuration of controls of the game//
+    // configuration of controls of the game//
     initControls() {
         document.addEventListener("keydown", (e) => {
             const { code } = e;
@@ -116,25 +115,25 @@ class Game {
             this.syncExistingPiecesWithBoard();
         });
     }
-// attempt to try to move the piece to the rigth //
+    // attempt to try to move the piece to the rigth //
     attemptMoveRight() {
         if (this.figureCanMoveRight()) {
             this.globalX++;
         }
     }
-// attempt to try to move the piece to the left//
+    // attempt to try to move the piece to the left//
     attemptMoveLeft() {
         if (this.figureCanMoveLeft()) {
             this.globalX--;
         }
     }
-// attempt to try to move the piece to the down//
+    // attempt to try to move the piece to the down//
     attemptMoveDown() {
         if (this.figureCanMoveDown()) {
             this.globalY++;
         }
     }
-// attempt to try to rotate the piece //
+    // attempt to try to rotate the piece //
     attemptRotate() {
         this.rotateFigure();
     }
@@ -150,14 +149,14 @@ class Game {
             this.$btnPause.hidden = true;
         }
     }
-// to pause the game//
+    // to pause the game//
     pauseGame() {
         this.sounds.background.pause();
         this.paused = true;
         this.canPlay = false;
         clearInterval(this.intervalId);
     }
-// to return to the current game after pause//
+    // to return to the current game after pause//
     resumeGame() {
         this.refreshScore();
         this.paused = false;
@@ -165,7 +164,7 @@ class Game {
         this.intervalId = setInterval(this.mainLoop.bind(this), Game.PIECE_SPEED);
     }
 
-// to return to the current game after pause//
+    // to return to the current game after pause//
     moveFigurePointsToExistingPieces() {
         this.canPlay = false;
         for (const point of this.currentFigure.getPoints()) {
