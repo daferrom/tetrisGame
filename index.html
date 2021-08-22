@@ -7,18 +7,22 @@
     <link rel="stylesheet" href="./Assets/styles/bootstrap.min.css" />
     <link rel="stylesheet" href="./Assets/styles/all.min.css" />
     <title>Tetris - Game</title>
+    <script src="./Assets/scripts/sweetalert2.min.js"></script>
   </head>
   <body>
     <main>
       <div class="container-fluid">
         <div class="row">
           <div class="col-12 text-center">
+            <!--Title and message to start the game
+            titulo y mensage para empezar el juego -->
             <h1>Tetris - Game</h1>
             <h2 id="puntaje">
               Presiona <kbd>P</kbd> o pulsa el botón para comenzar
             </h2>
           </div>
           <div class="col-12 text-center">
+            <!--buttons-->
             <canvas id="canvas"></canvas>
             <br />
             <div class="mt-2">
@@ -29,12 +33,13 @@
                 <i class="fas fa-pause"></i>
               </button>
               <button id="reset" class="btn btn-danger">Reset</button>
-            </div>
+            </div>            
           </div>
         </div>
       </div>
     </main>
-    <script src="./Assets/scripts/sweetalert2.min.js"></script>
+     
+    
     <script src="./Assets/scripts/tetris.js"></script>
   </body>
 </html>
