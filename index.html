@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./Assets/styles/bootstrap.min.css" />
-    <link rel="stylesheet" href="./Assets/styles/style.css" />
-    <title>Tetris</title>
+    <link rel="stylesheet" href="./Assets/styles/all.min.css" />
+    <title>Tetris - Game</title>
     <script src="./Assets/scripts/sweetalert2.min.js"></script>
   </head>
   <body>
@@ -16,16 +16,24 @@
           <div class="col-12 text-center">
             <!--Title and message to start the game
             titulo y mensage para empezar el juego -->
-            <h1>Tetris</h1>
-            <h2 id="puntaje">Presiona <kbd>P</kbd> o pulsa el botón para comenzar</h2>
+            <h1>Tetris - Game</h1>
+            <h2 id="puntaje">
+              Presiona <kbd>P</kbd> o pulsa el botón para comenzar
+            </h2>
           </div>
           <div class="col-12 text-center">
-            <!--buttons of original code omited for now
-            / botones del codigo original omitidos por ahora-->
+            <!--buttons-->
             <canvas id="canvas"></canvas>
-            <br>
-            <button id="btnIniciar" class="btn btn-success">start<i class="fas fa-play"></i></button>
-            <button class="btn btn-danger" id="reset">Reset</button>
+            <br />
+            <div class="mt-2">
+              <button id="btnIniciar" class="btn btn-success">
+                <i class="fas fa-play"></i>
+              </button>
+              <button hidden id="btnPausar" class="btn btn-success">
+                <i class="fas fa-pause"></i>
+              </button>
+              <button id="reset" class="btn btn-danger">Reset</button>
+            </div>            
           </div>
         </div>
       </div>
