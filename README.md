@@ -1,4 +1,5 @@
-# tetrisGame
+/********************** TetrisGame *************************/
+
 TECNOLOGIAS USADAS:HTML - JAVASCRIPT - CSS, se usa canvas para el tablero.
 
 TABLERO(10x16)
