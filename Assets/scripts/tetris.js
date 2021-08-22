@@ -108,7 +108,7 @@ class Game {
             }
             this.syncExistingPiecesWithBoard();
         });
-
+        // functions to pause or resume game with a button //
         [this.$btnPause, this.$btnResume].forEach($btn => $btn.addEventListener("click", () => {
             this.pauseOrResumeGame();
         }));
