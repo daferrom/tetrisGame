@@ -1,12 +1,12 @@
 class Game {
     // Square length in pixels
-    static SQUARE_LENGTH = screen.width > 420 ? 30 : 20;
+    static SQUARE_LENGTH = screen.width > 420 ? 30 : 40;
     static COLUMNS = 10;
     static ROWS = 16;
     static CANVAS_WIDTH = this.SQUARE_LENGTH * this.COLUMNS;
     static CANVAS_HEIGHT = this.SQUARE_LENGTH * this.ROWS;
-    static EMPTY_COLOR = "#808080";
-    static BORDER_COLOR = "#C5C5CC";
+    static EMPTY_COLOR = "#565656";
+    static BORDER_COLOR = "777777";
     static DELETED_ROW_COLOR = "red";
     // When a piece collapses with something at its bottom, how many time wait for putting another piece? (in ms)
     static TIMEOUT_LOCK_PUT_NEXT_PIECE = 300;
@@ -68,7 +68,7 @@ class Game {
         this.refreshScore();
         this.pauseGame();
     }
-
+    //shows the welcome with a sweetalert//
     showWelcome() {
         Swal.fire("Bienvenido", `
             <br>
@@ -394,9 +394,12 @@ class Game {
         switch (Utils.getRandomNumberInRange(1, 7)) {
 
             case 1:
-                /* The square "o"*/
+                /* The square "O"*/
                 return new Tetromino([
-                    [new Point(0, 0), new Point(1, 0), new Point(0, 1), new Point(1, 1)]
+                    [new Point(0, 0),
+                    new Point(1, 0), 
+                    new Point(0, 1), 
+                    new Point(1, 1)]
                 ]);
 
             case 2:
