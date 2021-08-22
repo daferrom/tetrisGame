@@ -50,7 +50,7 @@ class Game {
         this.intervalId = null;
         this.init();
     }
-
+//Invoce the necessary functions to start the game//
     init() {
         this.showWelcome();
         this.initDomElements();
@@ -58,7 +58,7 @@ class Game {
         this.draw();
         this.initControls();
     }
-
+//the function to reset the game//
     resetGame() {
         this.score = 0;
         this.initBoardAndExistingPieces();
@@ -228,7 +228,7 @@ class Game {
         }
     }
 
-
+// the function check if it is a line completed and erase it //
     verifyAndDeleteFullRows() {
 
         const yCoordinates = this.getPointsToDelete();
